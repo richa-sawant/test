@@ -40,11 +40,11 @@ module.exports.login_post = async (req, res) => {
             if (auth) {
                 const token = createToken(user.id);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: process.env.JWT_EXPIRE * 1000 });
-                res.status(201).json({ user: user.id });
-            } else {
+                res.status(201).json({ user: user }); // Send user data on successful login
+              } else {
                 console.log("Invalid password");
                 res.status(401).json({ user: undefined, error: "Invalid password" });
-            }
+              }
         } else {
             console.log("User not found");
             res.status(404).json({ user: undefined, error: "User not found" });

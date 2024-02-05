@@ -28,7 +28,7 @@ function Todo() {
         }
         if (list.length) {
             try {
-                await fetch('/api/todo', {
+                await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function Todo() {
         const temp = list.filter((_element, index) => index !== idx && list[index]);
         setList(temp);
         try {
-            await fetch('/api/todo', {
+            await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function Todo() {
     useEffect(() => {
         async function handleGetAll() {
             try {
-                const url = `/api/todoALL?day=${date.day}&month=${date.month}&year=${date.year}`;
+                const url = `${process.env.REACT_APP_EXPRESS_URL}/api/todoALL?day=${date.day}&month=${date.month}&year=${date.year}`;
                 const response = await fetch(url);
                 const data = await response.json();
 

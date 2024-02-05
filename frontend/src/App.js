@@ -5,7 +5,7 @@ import Homepage from './components/Homepage';
 import ContactUs from './pages/ContactUs';
 import Signup from "./pages/signup"
 import Todo from "./pages/todo"
-import { Route, Routes } from "react-router-dom"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import AboutUs from './pages/AboutUs';
 import Questionnaire from './pages/questionnaire';
 import Dashboard from './pages/dashboard';
@@ -18,8 +18,8 @@ function App() {
   return (
 
     <div className="bg-slate-900 text-white min-h-screen min-w-full ">
-      <AuthContextProvider>
-        <DateContextProvider>
+     
+        <Router>
           <Navbar />
           <Routes>
             <Route path="/" element={<Homepage />} />
@@ -32,8 +32,7 @@ function App() {
             <Route path="/todo" element={<Todo />} />
             <Route path="/calendar" element={<CalendarPage />} />
           </Routes>
-        </DateContextProvider>
-      </AuthContextProvider>
+          </Router>
     </div >
 
   );

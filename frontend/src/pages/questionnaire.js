@@ -34,7 +34,7 @@ const Questionnaire = () => {
     try {
       setLoading(true);
 
-      const response = await fetch(`/api/questionnaire/add`, {
+      const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/questionnaire/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -11,25 +11,39 @@ export default function Simple({ login }) {
     const [password, setPass] = useState("");
     const [showPassword, setShowPassword] = useState(false); // Add this line
     const [error, setError] = useState([""]);
+
     async function formSubmit(e) {
         e.preventDefault();
 
         try {
-            const response = await fetch(login ? `${process.env.REACT_APP_EXPRESS_URL}/api/login` : `${process.env.REACT_APP_EXPRESS_URL}/api/signup`, {
-                // Request details...
-            });
+            const response = await fetch(
+                login
+                    ? `${process.env.REACT_APP_EXPRESS_URL}/api/login`
+                    : `${process.env.REACT_APP_EXPRESS_URL}/api/signup`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        ...(login ? {} : { email }),
+                        username: username,
+                        password: password,
+                    }),
+                });
 
             if (response.ok) {
                 const responseData = await response.json();
-                if (!responseData.user) {
-                    setError([responseData.error]); // Ensure error is an array
-                    setAuthenticated(false);  // Corrected function
+                if (responseData.user) {
+                    setAuthenticated(true);
                 } else {
-                    setAuthenticated(true);  // Corrected function
+                    setError([responseData.error]); // Ensure error is an array
+                    setAuthenticated(false);
                 }
             } else {
                 setError(["An error occurred"]); // Ensure error is an array
-                setAuthenticated(false);  // Corrected function
+                setAuthenticated(false);
             }
         } catch (err) {
             console.error(err);
@@ -38,12 +52,12 @@ export default function Simple({ login }) {
         }
     }
 
-    if (setAuthenticated && !login) {
+    if (isAuthenticated && !login) {
         return <Navigate to="/questionnaire" />
     }
 
-    if (setAuthenticated && login) {
-     
+    if (isAuthenticated && login) {
+
         return <Navigate to="/dashboard" />
     }
     const handleKeyDown = (e) => {
