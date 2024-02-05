@@ -38,9 +38,9 @@ const Questionnaire = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({ ...answers, user: user._id }),
+        credentials: 'include', 
       });
 
       const data = await response.json();

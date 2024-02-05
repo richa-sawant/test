@@ -25,14 +25,15 @@ export default function Simple({ login }) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: "include",
                     body: JSON.stringify({
                         ...(login ? {} : { email }),
                         username: username,
                         password: password,
                     }),
-                });
-
+                    credentials: "include",
+                }
+            );
+            
             if (response.ok) {
                 const responseData = await response.json();
                 if (responseData.user) {

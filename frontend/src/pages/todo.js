@@ -18,44 +18,47 @@ function Todo() {
     }
 
     async function handleSubmit() {
-        let temp = list;
-        let item = handleDataEntry();
-        if (item) {
-            temp = list.concat(item);
-            setErr('');
-        } else {
-            setErr('Please enter a task');
-        }
-        if (list.length) {
-            try {
-                await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ list: temp, day: date.day, month: date.month, year: date.year }),
-                });
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    }
-
-    async function handleDelete(idx) {
-        const temp = list.filter((_element, index) => index !== idx && list[index]);
-        setList(temp);
-        try {
-            await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ list: temp, day: date.day, month: date.month, year: date.year }),
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
+      let temp = list;
+      let item = handleDataEntry();
+      if (item) {
+          temp = list.concat(item);
+          setErr('');
+      } else {
+          setErr('Please enter a task');
+      }
+      if (list.length) {
+          try {
+              await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ list: temp, day: date.day, month: date.month, year: date.year }),
+                  credentials: 'include', 
+              });
+          } catch (err) {
+              console.error(err);
+          }
+      }
+  }
+  
+  async function handleDelete(idx) {
+      const temp = list.filter((_element, index) => index !== idx && list[index]);
+      setList(temp);
+      try {
+          await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/todo`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ list: temp, day: date.day, month: date.month, year: date.year }),
+              credentials: 'include', 
+          });
+      } catch (err) {
+          console.error(err);
+      }
+  }
+  
 
     useEffect(() => {
         async function handleGetAll() {
