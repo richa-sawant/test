@@ -5,9 +5,23 @@ export const checkAuthentication = async () => {
             credentials: 'include',
         });
 
-        return response;  // Updated line
+        return response;
     } catch (err) {
         console.error(err);
-        return { status: 500, error: err.message };  // Updated line
+        throw new Error({ status: 500, error: err.message });
+    }
+};
+
+export const refreshAccessToken = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/refreshToken`, {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        return response;
+    } catch (err) {
+        console.error(err);
+        throw new Error({ status: 500, error: err.message });
     }
 };

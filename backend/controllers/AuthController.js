@@ -6,13 +6,11 @@ require("dotenv").config();
 module.exports.signup = async (req, res) => {
     const { email, username, password } = req.body;
     try {
-        // Check if the email or username is already registered
+        
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
             return res.status(400).json({ error: "Email or username is already registered" });
         }
-
-        // Create a new user
         const user = await User.create({ email, username, password });
         const token = createToken(user.id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: process.env.JWT_EXPIRE * 1000 });
@@ -40,7 +38,7 @@ module.exports.login_post = async (req, res) => {
             if (auth) {
                 const token = createToken(user.id);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: process.env.JWT_EXPIRE * 1000 });
-                res.status(201).json({ user: user }); // Send user data on successful login
+                res.status(201).json({ user: user }); 
               } else {
                 console.log("Invalid password");
                 res.status(401).json({ user: undefined, error: "Invalid password" });

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
-
+const createToken = require("../Utils/makeToken");
 module.exports.isAuthenticated = (req, res, next) => {
     const token = req.cookies.jwt;
 

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { checkAuthentication } from "../utils/checkAuthentication";
+import { checkAuthentication , refreshAccessToken } from "../utils/checkAuthentication";
 
 export const AuthContext = createContext();
 
@@ -13,33 +13,38 @@ export default function AuthContextProvider({ children }) {
     }));
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const isAuthResponse = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/isAuth`);
-        const isAuthData = await isAuthResponse.json();
-        console.log('isAuthData:', isAuthData);
-        setAuthenticated(isAuthData.isAuthenticated);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-  
-    fetchUserData();
-  }, [setAuthenticated]);
-  
+  const fetchUserData = async () => {
+    try {
+      const isAuthResponse = await checkAuthentication();
+      const isAuthData = await isAuthResponse.json();
 
-  if (authData.isAuthenticated === null) {
-    return (
-      <div className="flex bg-slate-900 justify-center items-center h-screen flex-col gap-2">
-        <img src="/load.png" alt="loading" className="animate-spin w-10" />
-        <p className="font-oswald font-semibold">"LEMME COOK"</p>
-      </div>
-    );
-  }
+      if (isAuthData.isAuthenticated) {
+        setAuthenticated(true);
+      } else {
+        // Token expired or not authenticated
+        setAuthenticated(false);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setAuthenticated(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const refreshUserToken = async () => {
+    try {
+      await refreshAccessToken();
+      await fetchUserData();
+    } catch (error) {
+      console.error('Error refreshing user token:', error);
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ ...authData, setAuthenticated }}>
+    <AuthContext.Provider value={{ ...authData, setAuthenticated, refreshUserToken }}>
       {children}
     </AuthContext.Provider>
   );
